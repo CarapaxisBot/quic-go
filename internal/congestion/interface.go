@@ -26,3 +26,13 @@ type SendAlgorithmWithDebugInfos interface {
 	InRecovery() bool
 	GetCongestionWindow() protocol.ByteCount
 }
+
+// CongestionControlAlgorithm represents the congestion control algorithm
+type CongestionControlAlgorithm int
+
+const (
+	// NewReno is the traditional TCP NewReno algorithm
+	NewReno CongestionControlAlgorithm = iota
+	// CUBIC is the CUBIC congestion control algorithm
+	CUBIC
+)

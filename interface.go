@@ -8,6 +8,7 @@ import (
 	"net"
 	"time"
 
+	"github.com/quic-go/quic-go/internal/congestion"
 	"github.com/quic-go/quic-go/internal/handshake"
 	"github.com/quic-go/quic-go/internal/protocol"
 	"github.com/quic-go/quic-go/logging"
@@ -339,6 +340,8 @@ type Config struct {
 	Allow0RTT bool
 	// Enable QUIC datagram support (RFC 9221).
 	EnableDatagrams bool
+	// CongestionControl specifies the congestion control algorithm
+	CongestionControl congestion.CongestionControlAlgorithm
 	Tracer          func(context.Context, logging.Perspective, ConnectionID) *logging.ConnectionTracer
 }
 
@@ -369,3 +372,12 @@ type ConnectionState struct {
 	// GSO says if generic segmentation offload is used
 	GSO bool
 }
+
+// CongestionControlAlgorithm represents the congestion control algorithm
+type CongestionControlAlgorithm = congestion.CongestionControlAlgorithm
+
+// Constants for congestion control algorithms
+const (
+	CUBIC    CongestionControlAlgorithm = congestion.CUBIC
+	NewReno  CongestionControlAlgorithm = congestion.NewReno
+)

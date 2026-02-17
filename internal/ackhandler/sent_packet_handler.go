@@ -117,12 +117,15 @@ func newSentPacketHandler(
 	pers protocol.Perspective,
 	tracer *logging.ConnectionTracer,
 	logger utils.Logger,
+	congAlg congestion.CongestionControlAlgorithm,
 ) *sentPacketHandler {
+	// Use reno=true for NewReno, reno=false for actual CUBIC
+	useReno := congAlg == congestion.NewReno
 	congestion := congestion.NewCubicSender(
 		congestion.DefaultClock{},
 		rttStats,
 		initialMaxDatagramSize,
-		true, // use Reno
+		useReno,
 		tracer,
 	)
 

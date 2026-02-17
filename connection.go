@@ -280,6 +280,7 @@ var newConnection = func(
 		s.perspective,
 		s.tracer,
 		s.logger,
+		s.config.CongestionControl,
 	)
 	s.maxPayloadSizeEstimate.Store(uint32(estimateMaxPayloadSize(protocol.ByteCount(s.config.InitialPacketSize))))
 	params := &wire.TransportParameters{
@@ -390,6 +391,7 @@ var newClientConnection = func(
 		s.perspective,
 		s.tracer,
 		s.logger,
+		s.config.CongestionControl,
 	)
 	s.maxPayloadSizeEstimate.Store(uint32(estimateMaxPayloadSize(protocol.ByteCount(s.config.InitialPacketSize))))
 	oneRTTStream := newCryptoStream()
