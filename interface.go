@@ -92,6 +92,16 @@ type ConnectionIDGenerator interface {
 	ConnectionIDLen() int
 }
 
+// CongestionControlAlgorithm is the congestion control algorithm to use.
+type CongestionControlAlgorithm int
+
+const (
+	// NewReno is the classic TCP NewReno congestion control algorithm.
+	NewReno CongestionControlAlgorithm = iota
+	// CUBIC is the CUBIC congestion control algorithm (RFC 8312).
+	CUBIC
+)
+
 // Config contains all configuration data needed for a QUIC server or client.
 type Config struct {
 	// GetConfigForClient is called for incoming connections.
@@ -175,6 +185,9 @@ type Config struct {
 	// Enable QUIC Stream Resets with Partial Delivery.
 	// See https://datatracker.ietf.org/doc/html/draft-ietf-quic-reliable-stream-reset-07.
 	EnableStreamResetPartialDelivery bool
+	// CongestionControl is the congestion control algorithm to use.
+	// If not set, it defaults to NewReno.
+	CongestionControl CongestionControlAlgorithm
 
 	Tracer func(ctx context.Context, isClient bool, connID ConnectionID) qlogwriter.Trace
 }

@@ -5,6 +5,16 @@ import (
 	"github.com/quic-go/quic-go/internal/protocol"
 )
 
+// CongestionControlAlgorithm is the congestion control algorithm to use.
+type CongestionControlAlgorithm int
+
+const (
+	// NewReno is the classic TCP NewReno congestion control algorithm.
+	NewReno CongestionControlAlgorithm = iota
+	// CUBIC is the CUBIC congestion control algorithm (RFC 8312).
+	CUBIC
+)
+
 // A SendAlgorithm performs congestion control
 type SendAlgorithm interface {
 	TimeUntilSend(bytesInFlight protocol.ByteCount) monotime.Time

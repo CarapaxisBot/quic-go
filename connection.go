@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"github.com/quic-go/quic-go/internal/ackhandler"
+	"github.com/quic-go/quic-go/internal/congestion"
 	"github.com/quic-go/quic-go/internal/flowcontrol"
 	"github.com/quic-go/quic-go/internal/handshake"
 	"github.com/quic-go/quic-go/internal/monotime"
@@ -321,6 +322,7 @@ var newConnection = func(
 		s.perspective,
 		s.qlogger,
 		s.logger,
+		congestion.CongestionControlAlgorithm(s.config.CongestionControl),
 	)
 	s.currentMTUEstimate.Store(uint32(estimateMaxPayloadSize(protocol.ByteCount(s.config.InitialPacketSize))))
 	statelessResetToken := statelessResetter.GetStatelessResetToken(srcConnID)
@@ -450,6 +452,7 @@ var newClientConnection = func(
 		s.perspective,
 		s.qlogger,
 		s.logger,
+		congestion.CongestionControlAlgorithm(s.config.CongestionControl),
 	)
 	s.currentMTUEstimate.Store(uint32(estimateMaxPayloadSize(protocol.ByteCount(s.config.InitialPacketSize))))
 	oneRTTStream := newCryptoStream()

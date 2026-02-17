@@ -128,13 +128,16 @@ func NewSentPacketHandler(
 	pers protocol.Perspective,
 	qlogger qlogwriter.Recorder,
 	logger utils.Logger,
+	congControl congestion.CongestionControlAlgorithm,
 ) SentPacketHandler {
+	// Use CUBIC if specified, otherwise use Reno (via reno=true)
+	useCubic := congControl == congestion.CUBIC
 	congestion := congestion.NewCubicSender(
 		congestion.DefaultClock{},
 		rttStats,
 		connStats,
 		initialMaxDatagramSize,
-		true, // use Reno
+		!useCubic, // use Reno if not CUBIC
 		qlogger,
 	)
 
