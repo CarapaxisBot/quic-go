@@ -8,6 +8,7 @@ import (
 	"slices"
 	"time"
 
+	"github.com/quic-go/quic-go/internal/congestion"
 	"github.com/quic-go/quic-go/internal/handshake"
 	"github.com/quic-go/quic-go/internal/protocol"
 	"github.com/quic-go/quic-go/qlogwriter"
@@ -189,6 +190,8 @@ type Config struct {
 	// Enable QUIC Stream Resets with Partial Delivery.
 	// See https://datatracker.ietf.org/doc/html/draft-ietf-quic-reliable-stream-reset-07.
 	EnableStreamResetPartialDelivery bool
+	// CongestionControl specifies the congestion control algorithm
+	CongestionControl congestion.CongestionControlAlgorithm
 
 	Tracer func(ctx context.Context, isClient bool, connID ConnectionID) qlogwriter.Trace
 }
@@ -227,3 +230,12 @@ type ConnectionState struct {
 	// GSO says if generic segmentation offload is used.
 	GSO bool
 }
+
+// Constants for congestion control algorithms
+const (
+	CUBIC   CongestionControlAlgorithm = congestion.CUBIC
+	NewReno CongestionControlAlgorithm = congestion.NewReno
+)
+
+// CongestionControlAlgorithm type alias
+type CongestionControlAlgorithm = congestion.CongestionControlAlgorithm
